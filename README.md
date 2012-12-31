@@ -10,7 +10,7 @@ All are welcome to join 3DJ, an open source project. The source code can be foun
 
 * Tested on OpenFrameworks v 0073 on mac osx 10.8. Should work on every platform...
 
-* ofxOpenNI version 2.0 (Gameoverhack verion)
+* ofxOpenNI version 2.0 (Gameoverhack version)
 
 
 <b>CAVEAT</b>
