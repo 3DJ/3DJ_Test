@@ -1,0 +1,7 @@
+bin/3DJ
+bin/openNISample007*
+bin/data/sounds
+bin/libs
+bin/data/openni
+obj
+.DS_Store
