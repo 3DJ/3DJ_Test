@@ -65,7 +65,7 @@ void testApp::draw(){
         ofRotateX(180);
         const ofPoint t = ofPoint(-(openNIDevice.getWidth()/2), -(openNIDevice.getHeight()/2),-1500);
         ofTranslate(t);
-        orbs->drawHandOrbs(handPosition, 100.0f);
+        orbs->drawHandOrbs(handPosition, 50.0f);
         ofPopMatrix();
     }
     cam.end();

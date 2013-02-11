@@ -14,7 +14,11 @@ CHandOrbs::CHandOrbs(int numHandsToTrack) {
     
     // load the texure
 	ofDisableArbTex();
+    
 	ofLoadImage(texture, "sprites/orb.png");
+    for(int i = 0; i < m_numHandsToTrack; i++) {
+        sizes.push_back(ofVec3f(100.0f));
+    }
     
     // upload the data to the vbo
 	vbo.setVertexData(&points[0], m_numHandsToTrack, GL_STATIC_DRAW);
@@ -44,6 +48,7 @@ void CHandOrbs::addPoint(float x, float y, float z, float radius) {
     ofVec3f p(x, y, z);
 	points.push_back(p);
 	
+    
 	// we are passing the size in as a normal x position
 	sizes.push_back(ofVec3f(radius));
     
@@ -62,24 +67,22 @@ void CHandOrbs::drawHandOrbs(ofPoint &p, float radius) {
     
     glDepthMask(GL_FALSE);
 	ofSetColor(90, 100, 255);
-	
+    
 	// Make orbs GLOW!!!
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
 	ofEnablePointSprites();
-	
+
 	// bind the shader
 	shader.begin();
-    
+
     // bind the texture so that when all the points
 	// are drawn they are replace with our dot image
 	texture.bind();
+
 	vbo.draw(GL_POINTS, 0, (int)points.size());
 	texture.unbind();
 	
 	shader.end();
-	
-    //ofSetColor(255);
-    //ofCircle(p.x-(radius/2), p.y-(radius/2), -p.z, radius);
     
 	ofDisablePointSprites();
 	ofDisableBlendMode();
@@ -87,6 +90,7 @@ void CHandOrbs::drawHandOrbs(ofPoint &p, float radius) {
     ofPopMatrix();
     
     points.clear();  //delete points and let the next time through loop make new ones
+    sizes.clear();
 }
 
 void CHandOrbs::drawCirclesOnHands(ofPoint &p, float radius, bool drawLines) {
