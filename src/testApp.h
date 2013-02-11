@@ -3,11 +3,18 @@
 
 #include "ofxOpenNI.h"
 #include "ofMain.h"
+#include "CHandOrbs.h"
 
 class testApp : public ofBaseApp{
 
 public:
+    
 	void setup();
+    ~testApp();
+    
+    void setupKinectEssentials();
+    void setupHandTracking();
+    void setupBaseUserPreferences();
 	void update();
 	void draw();
     void drawMesh(ofxOpenNIUser *user);
@@ -25,6 +32,7 @@ public:
     
 	ofxOpenNI openNIDevice;
     ofEasyCam cam;
+    CHandOrbs *orbs;
     
 };
 

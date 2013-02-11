@@ -23,6 +23,7 @@
 		224AF2731690FA0E008F6734 /* libXnVNite_1_5_2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 224AF2651690FA0E008F6734 /* libXnVNite_1_5_2.dylib */; };
 		224AF28B1690FC05008F6734 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 224AF2881690FC05008F6734 /* main.cpp */; };
 		224AF28C1690FC05008F6734 /* testApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 224AF2891690FC05008F6734 /* testApp.cpp */; };
+		2276260A16C8800600575476 /* CHandOrbs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2276260816C8800600575476 /* CHandOrbs.cpp */; };
 		77CAE36B14BC009900772BC0 /* ofxOpenNI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 77CAE36514BC009900772BC0 /* ofxOpenNI.cpp */; };
 		77EBF17C14BEF08600D2C8EC /* ofxOpenNITypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 77EBF17914BEF08600D2C8EC /* ofxOpenNITypes.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
@@ -91,6 +92,8 @@
 		224AF2881690FC05008F6734 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		224AF2891690FC05008F6734 /* testApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testApp.cpp; sourceTree = "<group>"; };
 		224AF28A1690FC05008F6734 /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testApp.h; sourceTree = "<group>"; };
+		2276260816C8800600575476 /* CHandOrbs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHandOrbs.cpp; sourceTree = "<group>"; };
+		2276260916C8800600575476 /* CHandOrbs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHandOrbs.h; sourceTree = "<group>"; };
 		22B1209A16911263003204F1 /* openNISample007Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = openNISample007Debug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		770F033514B996AE003CCE99 /* libusb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libusb.h; sourceTree = "<group>"; };
 		770F033714B996AE003CCE99 /* XnCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XnCommon.h; sourceTree = "<group>"; };
@@ -596,8 +599,10 @@
 			isa = PBXGroup;
 			children = (
 				224AF2881690FC05008F6734 /* main.cpp */,
-				224AF2891690FC05008F6734 /* testApp.cpp */,
 				224AF28A1690FC05008F6734 /* testApp.h */,
+				224AF2891690FC05008F6734 /* testApp.cpp */,
+				2276260816C8800600575476 /* CHandOrbs.cpp */,
+				2276260916C8800600575476 /* CHandOrbs.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -701,6 +706,7 @@
 				77EBF17C14BEF08600D2C8EC /* ofxOpenNITypes.cpp in Sources */,
 				224AF28B1690FC05008F6734 /* main.cpp in Sources */,
 				224AF28C1690FC05008F6734 /* testApp.cpp in Sources */,
+				2276260A16C8800600575476 /* CHandOrbs.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
