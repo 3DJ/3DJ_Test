@@ -15,17 +15,25 @@ class CHandOrbs : public ofBaseApp{
     
 public:
     
-    CHandOrbs();
+    CHandOrbs(int numHandsToTrack);
     ~CHandOrbs();
+    
+    void update();
+    void draw();
+    void addPoint(float x, float y, float z, float radius);
     
     void drawHandOrbs(ofPoint &p, float radius);
     void drawCirclesOnHands(ofPoint &p, float radius, bool drawLines);
     void drawLinesBetweenHands(ofPoint &p1, ofPoint &p2, float radius);
     float distanceBetweenHands(ofPoint &p1, ofPoint &p2);
     
-    float m_handCircleRadius;
+    int m_numHandsToTrack;
     
-    ofImage orb;
+    vector <ofVec3f> points;
+    vector <ofVec3f> sizes;
+    ofVbo vbo;
+    ofShader shader;
+    ofTexture texture;
     
 };
 

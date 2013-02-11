@@ -9,7 +9,7 @@ void testApp::setup() {
     setupHandTracking();
     openNIDevice.start();
     
-    orbs = new CHandOrbs(); //hand tracking drawings
+    orbs = new CHandOrbs(4); //hand tracking drawings
     
     verdana.loadFont(ofToDataPath("verdana.ttf"), 24);
     cam.setFarClip(5000);
@@ -65,7 +65,7 @@ void testApp::draw(){
         ofRotateX(180);
         const ofPoint t = ofPoint(-(openNIDevice.getWidth()/2), -(openNIDevice.getHeight()/2),-1500);
         ofTranslate(t);
-        orbs->drawHandOrbs(handPosition, 50.0f);
+        orbs->drawHandOrbs(handPosition, 100.0f);
         ofPopMatrix();
     }
     cam.end();
@@ -102,8 +102,11 @@ void testApp::keyPressed(int key){
     switch (key) {
         case 'i':
             
-            
         break;
+            
+        case 'f':
+            ofToggleFullscreen();
+            break;
     }
 }
 

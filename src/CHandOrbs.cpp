@@ -8,26 +8,83 @@
 
 #include "CHandOrbs.h"
 
-CHandOrbs::CHandOrbs() {
-    m_handCircleRadius = 0.0f;
-    orb.loadImage("sprites/orb.png");
+CHandOrbs::CHandOrbs(int numHandsToTrack) {
+    
+    m_numHandsToTrack = numHandsToTrack;
+    
+    // load the texure
+	ofDisableArbTex();
+	ofLoadImage(texture, "sprites/orb.png");
+    
+    // upload the data to the vbo
+	vbo.setVertexData(&points[0], m_numHandsToTrack, GL_STATIC_DRAW);
+	vbo.setNormalData(&sizes[0], m_numHandsToTrack, GL_STATIC_DRAW);
+    
+    // load the shader
+	if(shader.load("shaders/orbShader")) {
+		printf("Shader is loaded\n");
+	} else {
+        printf("shader NOT loaded\n");
+    }
 }
 
 CHandOrbs::~CHandOrbs() {
     
 }
 
+void CHandOrbs::update() {
+    
+}
+
+void CHandOrbs::draw() {
+
+}
+
+void CHandOrbs::addPoint(float x, float y, float z, float radius) {
+    ofVec3f p(x, y, z);
+	points.push_back(p);
+	
+	// we are passing the size in as a normal x position
+	sizes.push_back(ofVec3f(radius));
+    
+    int total = (int)points.size();
+    vbo.setVertexData(&points[0], total, GL_STATIC_DRAW);
+    vbo.setNormalData(&sizes[0], total, GL_STATIC_DRAW);
+}
+
 void CHandOrbs::drawHandOrbs(ofPoint &p, float radius) {
+
+    addPoint(p.x-(radius/2), p.y-(radius/2), p.z, radius);
+    
+    
+    ofPopMatrix();
+    
+    glDepthMask(GL_FALSE);
+	ofSetColor(255, 100, 90);
+	
+	// Make orbs GLOW!!!
+	ofEnableBlendMode(OF_BLENDMODE_ADD);
+	ofEnablePointSprites();
+	
+	// bind the shader
+	shader.begin();
+    
+    // bind the texture so that when all the points
+	// are drawn they are replace with our dot image
+	texture.bind();
+	vbo.draw(GL_POINTS, 0, (int)points.size());
+	texture.unbind();
+	
+	shader.end();
+	
+    //ofCircle(p.x-(radius/2), p.y-(radius/2), -p.z, radius);
+    
+	ofDisablePointSprites();
+	ofDisableBlendMode();
     
     ofPushMatrix();
     
-    //ofFill();
-    //ofSetColor(255,0,0);
-    //ofCircle(p.x, p.y, p.z, 50.0f);
-    
-    orb.draw(p.x-(radius/2), p.y-(radius/2), p.z, radius, radius);
-    
-    ofPopMatrix();
+    points.clear();
 }
 
 void CHandOrbs::drawCirclesOnHands(ofPoint &p, float radius, bool drawLines) {
