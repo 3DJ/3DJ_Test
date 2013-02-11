@@ -60,7 +60,7 @@ void testApp::draw(){
         
         // get hand position
         ofPoint & handPosition = hand.getPosition();
-        
+    
         ofPushMatrix();
         ofRotateX(180);
         const ofPoint t = ofPoint(-(openNIDevice.getWidth()/2), -(openNIDevice.getHeight()/2),-1500);

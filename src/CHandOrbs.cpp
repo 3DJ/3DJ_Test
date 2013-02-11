@@ -47,6 +47,7 @@ void CHandOrbs::addPoint(float x, float y, float z, float radius) {
 	// we are passing the size in as a normal x position
 	sizes.push_back(ofVec3f(radius));
     
+    //reset Vertex and Normal Data for hands
     int total = (int)points.size();
     vbo.setVertexData(&points[0], total, GL_STATIC_DRAW);
     vbo.setNormalData(&sizes[0], total, GL_STATIC_DRAW);
@@ -57,10 +58,10 @@ void CHandOrbs::drawHandOrbs(ofPoint &p, float radius) {
     addPoint(p.x-(radius/2), p.y-(radius/2), p.z, radius);
     
     
-    ofPopMatrix();
+    ofPushMatrix();
     
     glDepthMask(GL_FALSE);
-	ofSetColor(255, 100, 90);
+	ofSetColor(90, 100, 255);
 	
 	// Make orbs GLOW!!!
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
@@ -77,14 +78,15 @@ void CHandOrbs::drawHandOrbs(ofPoint &p, float radius) {
 	
 	shader.end();
 	
+    //ofSetColor(255);
     //ofCircle(p.x-(radius/2), p.y-(radius/2), -p.z, radius);
     
 	ofDisablePointSprites();
 	ofDisableBlendMode();
     
-    ofPushMatrix();
+    ofPopMatrix();
     
-    points.clear();
+    points.clear();  //delete points and let the next time through loop make new ones
 }
 
 void CHandOrbs::drawCirclesOnHands(ofPoint &p, float radius, bool drawLines) {
@@ -110,5 +112,5 @@ void CHandOrbs::drawLinesBetweenHands(ofPoint &p1, ofPoint &p2, float radius) {
 float CHandOrbs::distanceBetweenHands(ofPoint &p1, ofPoint &p2) {
     //return sqrt(  powerof2((p2.x - p1.x))  +  powerof2((p2.y - p1.y))  +  powerof2((p2.z - p1.z)) );
     const ofVec3f pnt = ofVec3f(p2.x,p2.y,p2.z);
-    return p1.distance(pnt);
+    return abs(p1.distance(pnt));
 }
