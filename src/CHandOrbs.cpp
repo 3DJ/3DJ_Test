@@ -48,7 +48,6 @@ void CHandOrbs::addPoint(float x, float y, float z, float radius) {
     ofVec3f p(x, y, z);
 	points.push_back(p);
 	
-    
 	// we are passing the size in as a normal x position
 	sizes.push_back(ofVec3f(radius));
     
@@ -58,65 +57,75 @@ void CHandOrbs::addPoint(float x, float y, float z, float radius) {
     vbo.setNormalData(&sizes[0], total, GL_STATIC_DRAW);
 }
 
-void CHandOrbs::drawHandOrbs(ofPoint &p, float radius) {
+void CHandOrbs::drawHandOrbs(vector<ofPoint> &p, float radius) {
 
-    addPoint(p.x, p.y, p.z, radius);
+    if (p.size() != 2) { return; } //make sure two hands were passed in
     
+    for( vector<ofPoint>::iterator eachHand = p.begin(); eachHand != p.end(); eachHand++)
+    {
+        addPoint(eachHand->x, eachHand->y, eachHand->z, radius);
+        
+        ofPushMatrix();
+        
+        glDepthMask(GL_FALSE);
+        ofSetColor(90, 100, 255);
+        
+        // Make orbs GLOW!!!
+        ofEnableBlendMode(OF_BLENDMODE_ADD);
+        ofEnablePointSprites();
+        
+        // bind the shader
+        shader.begin();
+        
+        // bind the texture so that when all the points
+        // are drawn they are replace with our dot image
+        texture.bind();
+        
+        vbo.draw(GL_POINTS, 0, (int)points.size());
+        texture.unbind();
+        
+        shader.end();
+        
+        ofDisablePointSprites();
+        ofDisableBlendMode();
+        
+        ofPopMatrix();
+        
+        points.clear();  //delete points and let the next time through loop make new ones
+        sizes.clear();
+    }
     
-    ofPushMatrix();
-    
-    glDepthMask(GL_FALSE);
-	ofSetColor(90, 100, 255);
-    
-	// Make orbs GLOW!!!
-	ofEnableBlendMode(OF_BLENDMODE_ADD);
-	ofEnablePointSprites();
-
-	// bind the shader
-	shader.begin();
-
-    // bind the texture so that when all the points
-	// are drawn they are replace with our dot image
-	texture.bind();
-
-	vbo.draw(GL_POINTS, 0, (int)points.size());
-	texture.unbind();
-	
-	shader.end();
-    
-	ofDisablePointSprites();
-	ofDisableBlendMode();
-    
-    drawCirclesOnHands(p, radius, false);
-    
-    ofPopMatrix();
-    
-    points.clear();  //delete points and let the next time through loop make new ones
-    sizes.clear();
+    drawCirclesOnHands(p, radius, true);
+    drawLinesBetweenHands(p, radius);
 }
 
-void CHandOrbs::drawCirclesOnHands(ofPoint &p, float radius, bool drawLines) {
+void CHandOrbs::drawCirclesOnHands(vector<ofPoint> &p, float radius, bool drawLines) {
+    
+    if(drawLines) { drawLinesBetweenHands(p,radius); } //draw connecting lines bewtween hands
     
     ofPushMatrix();
-    
-    if(drawLines) { drawLinesBetweenHands(p,p,radius); }
-    
     ofNoFill();
     ofSetColor(255);
     ofSetLineWidth(2.f);
-    ofCircle(p.x, p.y, p.z, radius);
+    
+    for( vector<ofPoint>::iterator eachHand = p.begin(); eachHand != p.end(); eachHand++)
+    {
+        ofCircle(eachHand->x, eachHand->y, eachHand->z, radius);
+    }
     
     ofPopMatrix();
 }
 
-void CHandOrbs::drawLinesBetweenHands(ofPoint &p1, ofPoint &p2, float radius) {
-    ofLine(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
-
-    distanceBetweenHands(p1, p2);
+void CHandOrbs::drawLinesBetweenHands(vector<ofPoint> &p, float radius) {
+    
+    if (p.size() == 2) {  //Make sure there are only two hands
+        ofLine(p[0].x, p[0].y, p[0].z, p[1].x, p[1].y, p[1].z);
+        ofDrawBitmapString(ofToString(distanceBetweenHands(p)), 50, 50, 0);
+    }
 }
 
-float CHandOrbs::distanceBetweenHands(ofPoint &p1, ofPoint &p2) {
+float CHandOrbs::distanceBetweenHands(vector<ofPoint> &p) {
     //return sqrt(  powerof2((p2.x - p1.x))  +  powerof2((p2.y - p1.y))  +  powerof2((p2.z - p1.z)) );
-    const ofVec3f pnt = ofVec3f(p2.x,p2.y,p2.z);
-    return abs(p1.distance(pnt));
+    const ofVec3f pnt = ofVec3f(p[1].x,p[1].y,p[1].z);
+    return abs(p[0].distance(pnt));
 }

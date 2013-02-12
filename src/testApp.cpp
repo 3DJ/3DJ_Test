@@ -54,20 +54,38 @@ void testApp::draw(){
     }
     
     //Hands
-    for (int i = 0; i < openNIDevice.getNumTrackedHands(); i++){
-        // get a reference to this user
-        ofxOpenNIHand & hand = openNIDevice.getTrackedHand(i);
+    int numOfTrackedUsers = openNIDevice.getNumTrackedUsers();
+    for (int u = 0; u < numOfTrackedUsers; u++) {
+      ofxOpenNIUser & tUser = openNIDevice.getTrackedUser(u);
+        ofxOpenNIJoint &rh = tUser.getJoint(JOINT_RIGHT_HAND);
+        ofxOpenNIJoint &lh = tUser.getJoint(JOINT_LEFT_HAND);
+        ofPoint rhp = rh.getWorldPosition();
+        ofPoint lhp = lh.getWorldPosition();
         
-        // get hand position
-        ofPoint & handPosition = hand.getPosition();
-    
         ofPushMatrix();
         ofRotateX(180);
         const ofPoint t = ofPoint(-(openNIDevice.getWidth()/2), -(openNIDevice.getHeight()/2),-1500);
         ofTranslate(t);
-        orbs->drawHandOrbs(handPosition, 50.0f);
+        
+        ofCircle(rhp.x, rhp.y, rhp.z, 100);
+        ofCircle(lhp.x, lhp.y, lhp.z, 100);
         ofPopMatrix();
     }
+    
+//    for (int i = 0; i < openNIDevice.getNumTrackedHands(); i++){
+//        // get a reference to this user
+//        ofxOpenNIHand & hand = openNIDevice.getTrackedHand(i);
+//        
+//        // get hand position
+//        ofPoint & handPosition = hand.getPosition();
+//    
+//        ofPushMatrix();
+//        ofRotateX(180);
+//        const ofPoint t = ofPoint(-(openNIDevice.getWidth()/2), -(openNIDevice.getHeight()/2),-1500);
+//        ofTranslate(t);
+//        orbs->drawHandOrbs(handPosition, 50.0f);
+//        ofPopMatrix();
+//    }
     cam.end();
 }
 

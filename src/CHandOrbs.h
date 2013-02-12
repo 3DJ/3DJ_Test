@@ -22,11 +22,7 @@ public:
     void draw();
     void addPoint(float x, float y, float z, float radius);
     
-    void drawHandOrbs(ofPoint &p, float radius);
-    void drawCirclesOnHands(ofPoint &p, float radius, bool drawLines);
-    void drawLinesBetweenHands(ofPoint &p1, ofPoint &p2, float radius);
-    float distanceBetweenHands(ofPoint &p1, ofPoint &p2);
-    
+    void drawHandOrbs(vector<ofPoint> &p, float radius);
     
     int m_numHandsToTrack;
     
@@ -36,6 +32,12 @@ public:
     ofShader shader;
     ofTexture texture;
     
+private:
+    
+    void  drawCirclesOnHands(vector<ofPoint> &p, float radius, bool drawLines);
+    void  drawLinesBetweenHands(vector<ofPoint> &p, float radius);
+    float distanceBetweenHands(vector<ofPoint> &p);
+  
 };
 
 #endif /* defined(__openNiSample007__CHandOrbs__) */
