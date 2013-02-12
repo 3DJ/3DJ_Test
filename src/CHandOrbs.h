@@ -27,6 +27,7 @@ public:
     void drawLinesBetweenHands(ofPoint &p1, ofPoint &p2, float radius);
     float distanceBetweenHands(ofPoint &p1, ofPoint &p2);
     
+    
     int m_numHandsToTrack;
     
     vector <ofVec3f> points;

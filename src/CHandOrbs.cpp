@@ -60,7 +60,7 @@ void CHandOrbs::addPoint(float x, float y, float z, float radius) {
 
 void CHandOrbs::drawHandOrbs(ofPoint &p, float radius) {
 
-    addPoint(p.x-(radius/2), p.y-(radius/2), p.z, radius);
+    addPoint(p.x, p.y, p.z, radius);
     
     
     ofPushMatrix();
@@ -86,6 +86,8 @@ void CHandOrbs::drawHandOrbs(ofPoint &p, float radius) {
     
 	ofDisablePointSprites();
 	ofDisableBlendMode();
+    
+    drawCirclesOnHands(p, radius, false);
     
     ofPopMatrix();
     
