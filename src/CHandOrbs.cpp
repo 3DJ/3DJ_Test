@@ -120,12 +120,13 @@ void CHandOrbs::drawLinesBetweenHands(vector<ofPoint> &p, float radius) {
     
     if (p.size() == 2) {  //Make sure there are only two hands
         ofLine(p[0].x, p[0].y, p[0].z, p[1].x, p[1].y, p[1].z);
-        ofDrawBitmapString(ofToString(distanceBetweenHands(p)), 50, 50, 0);
+
+        ofDrawBitmapString(ofToString(distanceBetweenHands(p)),p[0].x, p[0].y, p[0].z);
     }
 }
 
 float CHandOrbs::distanceBetweenHands(vector<ofPoint> &p) {
     //return sqrt(  powerof2((p2.x - p1.x))  +  powerof2((p2.y - p1.y))  +  powerof2((p2.z - p1.z)) );
     const ofVec3f pnt = ofVec3f(p[1].x,p[1].y,p[1].z);
-    return abs(p[0].distance(pnt));
+    return abs(p[0].distance(pnt))/10.0f; //return value in meters
 }

@@ -34,6 +34,8 @@ public:
     ofEasyCam cam;
     CHandOrbs *orbs;
     
+    float handCircleRadius;
+    
 };
 
 #endif
