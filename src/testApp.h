@@ -33,6 +33,7 @@ public:
 	ofxOpenNI openNIDevice;
     ofEasyCam cam;
     CHandOrbs *orbs;
+    ofSoundPlayer song;
     
     float handCircleRadius;
     

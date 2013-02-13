@@ -42,6 +42,10 @@ void CHandOrbs::update() {
     dists.clear(); //reset distance collection
 }
 
+void CHandOrbs::preDraw() {
+    
+}
+
 void CHandOrbs::draw() {
 
 }
@@ -152,7 +156,7 @@ void CHandOrbs::drawHandDistancesToScreen(vector<string> &dists) {
     ofPushMatrix();
     ofRotateX(180);
     for( vector<string>::iterator d = dists.begin(); d != dists.end(); d++) {
-        font.drawString("Distance Between DJ " + ofToString(count) + "'s Hands: " + *d, x, count * y);
+        font.drawString("Hand Volume: " + *d, x, count * y);
         count ++;
     }
     

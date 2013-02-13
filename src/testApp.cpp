@@ -15,6 +15,10 @@ void testApp::setup() {
     cam.setFarClip(5000);
     
     handCircleRadius = 100.0f;
+    
+    song.loadSound("sounds/Maracas.mp3");
+    song.setVolume(1.0f);
+    song.play();
 }
 
 //--------------------------------------------------------------
@@ -26,6 +30,9 @@ testApp::~testApp() {
 //--------------------------------------------------------------
 void testApp::update(){
     openNIDevice.update();
+    ofSoundUpdate();
+    
+    orbs->update(); //call this after you set volume in song!!!
 }
 
 //--------------------------------------------------------------
@@ -60,13 +67,17 @@ void testApp::draw(){
                 rhp.z *= -1;  //flip in z direction
                 lhp.z *= -1;  //flip in z direction
                 
-                rhp.z += 1500;
-                lhp.z += 1500;
+                rhp.z += 1000;
+                lhp.z += 1000;
                 
                 vector<ofPoint> hands;
                 hands.push_back(rhp);
                 hands.push_back(lhp);
                 orbs->drawHandOrbs(hands, handCircleRadius);  //CHandOrbs drawing
+                
+                if (float volume = orbs->distanceBetweenHands(hands)) {
+                    if (i == 0) { song.setVolume(volume); } //Only allow first DJ to change volume
+                }
             }
         }
     }
@@ -97,6 +108,7 @@ void testApp::drawMesh(ofxOpenNIUser *user)
 //--------------------------------------------------------------
 void testApp::exit(){
     openNIDevice.stop();
+    song.stop();
 }
 
 //--------------------------------------------------------------

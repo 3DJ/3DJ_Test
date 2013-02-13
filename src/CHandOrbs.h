@@ -19,12 +19,14 @@ public:
     ~CHandOrbs();
     
     void update();
+    void preDraw();
     void draw();
     void addPoint(float x, float y, float z, float radius);
     void addDistanceToStringCollection(string s);
     
     void drawHandOrbs(vector<ofPoint> &p, float radius);
     void drawHandDistancesToScreen(vector<string> &dists);
+    float distanceBetweenHands(vector<ofPoint> &p);
     
     int m_numHandsToTrack;
     
@@ -41,7 +43,7 @@ private:
     
     void  drawCirclesOnHands(vector<ofPoint> &p, float radius, bool drawLines);
     void  drawLinesBetweenHands(vector<ofPoint> &p, float radius);
-    float distanceBetweenHands(vector<ofPoint> &p);
+ 
   
 };
 
