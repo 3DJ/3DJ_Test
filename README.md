@@ -1,3 +1,10 @@
+
+<b>HAND DJ MACHINE</b>
+* use your hands to control the volume of the song. This is a tester app.
+* place an MP3 of WAV file in data/sounds, then add that name in the testApp setup function to load the song. 
+* The original song is not included at this time, so please use your own. Have fun!
+
+
 <b>INTENT</b>
 
 This is a small app intended for quick testing with kinect sensors before integrating into 3DJ. Currently there is a vector of ofMesh vertices to do some test drawings. Change the drawMesh() to do what you want for drawings. I will build on this base app in the future and set up more functions with kinect data for easy use. 
