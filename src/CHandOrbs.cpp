@@ -12,6 +12,8 @@ CHandOrbs::CHandOrbs(int numHandsToTrack) {
     
     m_numHandsToTrack = numHandsToTrack;
     
+    font.loadFont("verdana.ttf", 24);
+    
     // load the texure
 	ofDisableArbTex();
     
@@ -37,7 +39,7 @@ CHandOrbs::~CHandOrbs() {
 }
 
 void CHandOrbs::update() {
-    
+    dists.clear(); //reset distance collection
 }
 
 void CHandOrbs::draw() {
@@ -57,8 +59,12 @@ void CHandOrbs::addPoint(float x, float y, float z, float radius) {
     vbo.setNormalData(&sizes[0], total, GL_STATIC_DRAW);
 }
 
-void CHandOrbs::drawHandOrbs(vector<ofPoint> &p, float radius) {
+void CHandOrbs::addDistanceToStringCollection( string s) {
+    dists.push_back(s);
+}
 
+void CHandOrbs::drawHandOrbs(vector<ofPoint> &p, float radius) {
+    
     if (p.size() != 2) { return; } //make sure two hands were passed in
     
     for( vector<ofPoint>::iterator eachHand = p.begin(); eachHand != p.end(); eachHand++)
@@ -95,6 +101,9 @@ void CHandOrbs::drawHandOrbs(vector<ofPoint> &p, float radius) {
         sizes.clear();
     }
     
+    string s = ofToString(distanceBetweenHands(p));
+    addDistanceToStringCollection(s);
+    
     drawCirclesOnHands(p, radius, true);
     drawLinesBetweenHands(p, radius);
 }
@@ -120,13 +129,33 @@ void CHandOrbs::drawLinesBetweenHands(vector<ofPoint> &p, float radius) {
     
     if (p.size() == 2) {  //Make sure there are only two hands
         ofLine(p[0].x, p[0].y, p[0].z, p[1].x, p[1].y, p[1].z);
-
-        ofDrawBitmapString(ofToString(distanceBetweenHands(p)),p[0].x, p[0].y, p[0].z);
+        string distance = ofToString(distanceBetweenHands(p));
+        ofDrawBitmapString(distance,p[0].x, p[0].y, p[0].z);
+        vector<string> dists;
+        dists.push_back(distance);
+        drawHandDistancesToScreen(dists);
     }
 }
 
 float CHandOrbs::distanceBetweenHands(vector<ofPoint> &p) {
     //return sqrt(  powerof2((p2.x - p1.x))  +  powerof2((p2.y - p1.y))  +  powerof2((p2.z - p1.z)) );
     const ofVec3f pnt = ofVec3f(p[1].x,p[1].y,p[1].z);
-    return abs(p[0].distance(pnt))/10.0f; //return value in meters
+    return abs(p[0].distance(pnt))/1000.0f; //return value in meters
 }
+
+void CHandOrbs::drawHandDistancesToScreen(vector<string> &dists) {
+    
+    int x = -340;
+    int y = -240;
+    int count = 1;
+    
+    ofPushMatrix();
+    ofRotateX(180);
+    for( vector<string>::iterator d = dists.begin(); d != dists.end(); d++) {
+        font.drawString("Distance Between DJ " + ofToString(count) + "'s Hands: " + *d, x, count * y);
+        count ++;
+    }
+    
+    ofPopMatrix();
+}
+

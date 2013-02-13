@@ -50,33 +50,27 @@ void testApp::draw(){
         for (int i = 0; i < numUsers; i++) {
             ofxOpenNIUser & user = openNIDevice.getTrackedUser(i);
             if (user.isTracking()) {
+
+                //Draw Mesh
                 drawMesh(&user);
+                
+                //Get Left and right hand posisitons
+                ofPoint rhp = openNIDevice.getTrackedUser(i).getJoint(JOINT_RIGHT_HAND).getWorldPosition();
+                ofPoint lhp = openNIDevice.getTrackedUser(i).getJoint(JOINT_LEFT_HAND).getWorldPosition();;
+                rhp.z *= -1;  //flip in z direction
+                lhp.z *= -1;  //flip in z direction
+                
+                rhp.z += 1500;
+                lhp.z += 1500;
+                
+                vector<ofPoint> hands;
+                hands.push_back(rhp);
+                hands.push_back(lhp);
+                orbs->drawHandOrbs(hands, handCircleRadius);  //CHandOrbs drawing
             }
         }
     }
-    
-    //Get Hands From Tracked Users
-    int numOfTrackedUsers = openNIDevice.getNumTrackedUsers();
-    for (int u = 0; u < numOfTrackedUsers; u++) {
-        
-        //If tracking confidence level is more than 25%, draw hands, otherwise, skip to next tracked user
-        if (openNIDevice.getTrackedUser(u).getConfidenceThreshold() > .25) {
-        
-            //Get Left and right hand posisitons
-            ofPoint rhp = openNIDevice.getTrackedUser(u).getJoint(JOINT_RIGHT_HAND).getWorldPosition();
-            ofPoint lhp = openNIDevice.getTrackedUser(u).getJoint(JOINT_LEFT_HAND).getWorldPosition();;
             
-            ofPushMatrix();
-            
-            vector<ofPoint> hands;
-            hands.push_back(rhp);
-            hands.push_back(lhp);
-            orbs->drawHandOrbs(hands, handCircleRadius);  //CHandOrbs drawing
-            
-            ofPopMatrix();
-        }
-    }
-    
     cam.end();
 }
 

@@ -21,16 +21,21 @@ public:
     void update();
     void draw();
     void addPoint(float x, float y, float z, float radius);
+    void addDistanceToStringCollection(string s);
     
     void drawHandOrbs(vector<ofPoint> &p, float radius);
+    void drawHandDistancesToScreen(vector<string> &dists);
     
     int m_numHandsToTrack;
     
     vector <ofVec3f> points;
     vector <ofVec3f> sizes;
+    vector <string> dists;
+    
     ofVbo vbo;
     ofShader shader;
     ofTexture texture;
+    ofTrueTypeFont font;
     
 private:
     
