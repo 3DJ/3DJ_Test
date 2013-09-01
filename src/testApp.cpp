@@ -13,7 +13,7 @@ void testApp::setup() {
     openNIDevice.addUserGenerator();
     openNIDevice.setLogLevel(OF_LOG_VERBOSE);
     openNIDevice.getWidth();
- 
+
     openNIDevice.setMaxNumUsers(2);
     openNIDevice.setUsePointCloudsAllUsers(true);
 
@@ -26,8 +26,8 @@ void testApp::setup() {
     user.setPointCloudDrawSize(2); // this is the size of the glPoint that will be drawn for the point cloud
     user.setPointCloudResolution(5); // this is the step size between points for the cloud
     openNIDevice.setBaseUserClass(user);
-    
-    
+
+
     // if you want to get fine grain control over each possible tracked user for some reason you can iterate
     // through users like I'm doing below. Please note the use of nID = 1 AND nID <= openNIDevices[0].getMaxNumUsers()
     // as what you're doing here is retrieving a user that is being stored in a std::map using it's XnUserID as the key
@@ -41,8 +41,8 @@ void testApp::setup() {
     //        user.setPointCloudDrawSize(2);
     //        user.setPointCloudResolution(1);
     //    }
-    
-    
+
+
     verdana.loadFont(ofToDataPath("verdana.ttf"), 24);
     cam.setFarClip(5000);
 }
@@ -55,20 +55,20 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     ofBackground(0);
-    
+
     ofSetColor(0, 255, 0);
 	string msg = "Num of Users Tracked: " + ofToString(openNIDevice.getNumTrackedUsers());
 	verdana.drawString(msg, 20, ofGetHeight() - 26);
-    
+
     cam.begin();
 
     ofPushMatrix();
     ofColor(255,50,50);
     ofCircle(0, 0, 0, 20); //Draw Circle in center of screen for orientation...
-    ofPopMatrix();    
+    ofPopMatrix();
 
     string pos = "not tracking user";
-    
+
     int numUsers = openNIDevice.getNumTrackedUsers();
     if (numUsers) {
         for (int i = 0; i < numUsers; i++) {
@@ -84,7 +84,7 @@ void testApp::draw(){
 void testApp::drawMesh(ofxOpenNIUser *user)
 {
     ofMesh m = user->getPointCloud();
-    
+
     vector<ofVec3f> vertices = m.getVertices();
     for ( vector<ofVec3f>::iterator vertex = vertices.begin(); vertex < vertices.end(); vertex++)
     {
@@ -109,8 +109,8 @@ void testApp::keyPressed(int key){
 
     switch (key) {
         case 'i':
-            
-            
+
+
         break;
     }
 }

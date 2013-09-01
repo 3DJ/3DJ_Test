@@ -22,10 +22,10 @@ public:
 	void windowResized(int w, int h);
 
     ofTrueTypeFont verdana;
-    
+
 	ofxOpenNI openNIDevice;
     ofEasyCam cam;
-    
+
 };
 
 #endif
