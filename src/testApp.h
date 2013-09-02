@@ -8,10 +8,10 @@
 class testApp : public ofBaseApp{
 
 public:
-    
+
 	void setup();
     ~testApp();
-    
+
     void setupKinectEssentials();
     void setupHandTracking();
     void setupBaseUserPreferences();
@@ -29,14 +29,14 @@ public:
 	void windowResized(int w, int h);
 
     ofTrueTypeFont verdana;
-    
+
 	ofxOpenNI openNIDevice;
     ofEasyCam cam;
     CHandOrbs *orbs;
     ofSoundPlayer song;
-    
+
     float handCircleRadius;
-    
+
 };
 
 #endif
