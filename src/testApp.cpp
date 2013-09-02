@@ -10,11 +10,13 @@ void testApp::setup() {
     openNIDevice.start();
 
     orbs = new CHandOrbs(4); //hand tracking drawings
+    m_joints = new CJointOrbs(4);
 
     verdana.loadFont(ofToDataPath("verdana.ttf"), 24);
     cam.setFarClip(5000);
 
     handCircleRadius = 100.0f;
+    jointCircleRadius = 75.0f;
 
     song.loadSound("sounds/Maracas.mp3");
     song.setVolume(1.0f);
@@ -25,6 +27,7 @@ void testApp::setup() {
 
 testApp::~testApp() {
     if (orbs) { delete orbs; }
+    if (m_joints) { delete m_joints; }
 }
 
 //--------------------------------------------------------------
@@ -33,6 +36,7 @@ void testApp::update(){
     ofSoundUpdate();
 
     orbs->update(); //call this after you set volume in song!!!
+    m_joints->update();
 }
 
 //--------------------------------------------------------------
@@ -63,10 +67,14 @@ void testApp::draw(){
 
                 //Get Left and right hand posisitons
                 ofPoint rhp = openNIDevice.getTrackedUser(i).getJoint(JOINT_RIGHT_HAND).getWorldPosition();
-                ofPoint lhp = openNIDevice.getTrackedUser(i).getJoint(JOINT_LEFT_HAND).getWorldPosition();;
+                ofPoint lhp = openNIDevice.getTrackedUser(i).getJoint(JOINT_LEFT_HAND).getWorldPosition();
+                ofPoint lkp = openNIDevice.getTrackedUser(i).getJoint(JOINT_LEFT_KNEE).getWorldPosition();
+                
                 rhp.z *= -1;  //flip in z direction
                 lhp.z *= -1;  //flip in z direction
-
+                lkp.z *= -1;
+                
+                lkp.z += 1000;
                 rhp.z += 1000;
                 lhp.z += 1000;
 
@@ -74,6 +82,10 @@ void testApp::draw(){
                 hands.push_back(rhp);
                 hands.push_back(lhp);
                 orbs->drawHandOrbs(hands, handCircleRadius);  //CHandOrbs drawing
+                
+                vector<ofPoint>joints;
+                joints.push_back(lkp);
+                m_joints->drawJointOrbs(joints, jointCircleRadius);
 
                 if (float volume = orbs->distanceBetweenHands(hands)) {
                     if (i == 0) { song.setVolume(volume); } //Only allow first DJ to change volume
@@ -87,22 +99,22 @@ void testApp::draw(){
 
 void testApp::drawMesh(ofxOpenNIUser *user)
 {
-    ofMesh m = user->getPointCloud();
-
-    vector<ofVec3f> vertices = m.getVertices();
-    for ( vector<ofVec3f>::iterator vertex = vertices.begin(); vertex < vertices.end(); vertex++)
-    {
-        ofPushMatrix();
-        ofRotateX(180);
-        const ofPoint t = ofPoint(-(openNIDevice.getWidth()/2), -(openNIDevice.getHeight()/2),-1500);
-        ofTranslate(t);
-        ofNoFill();
-        ofPoint p = ofPoint(vertex->x, vertex->y, vertex->z);
-        ofSetColor(255, 255, 255);
-        ofCircle(p.x, p.y, p.z, 2.0f);
-        ofPopMatrix();
-
-    }
+//    ofMesh m = user->getPointCloud();
+//
+//    vector<ofVec3f> vertices = m.getVertices();
+//    for ( vector<ofVec3f>::iterator vertex = vertices.begin(); vertex < vertices.end(); vertex++)
+//    {
+//        ofPushMatrix();
+//        ofRotateX(180);
+//        const ofPoint t = ofPoint(-(openNIDevice.getWidth()/2), -(openNIDevice.getHeight()/2),-1500);
+//        ofTranslate(t);
+//        ofNoFill();
+//        ofPoint p = ofPoint(vertex->x, vertex->y, vertex->z);
+//        ofSetColor(255, 255, 255);
+//        ofCircle(p.x, p.y, p.z, 2.0f);
+//        ofPopMatrix();
+//
+//    }
 }
 
 //--------------------------------------------------------------

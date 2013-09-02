@@ -4,6 +4,7 @@
 #include "ofxOpenNI.h"
 #include "ofMain.h"
 #include "CHandOrbs.h"
+#include "CJointOrbs.h"
 
 class testApp : public ofBaseApp{
 
@@ -33,9 +34,11 @@ public:
 	ofxOpenNI openNIDevice;
     ofEasyCam cam;
     CHandOrbs *orbs;
+    CJointOrbs *m_joints;
     ofSoundPlayer song;
 
     float handCircleRadius;
+    float jointCircleRadius;
 
 };
 

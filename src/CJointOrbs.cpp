@@ -65,8 +65,6 @@ void CJointOrbs::addPoint(float x, float y, float z, float radius) {
 
 void CJointOrbs::drawJointOrbs(vector<ofPoint> &p, float radius) {
 
-    if (p.size() != 2) { return; } //make sure two hands were passed in
-
     for( vector<ofPoint>::iterator eachJoint = p.begin(); eachJoint != p.end(); eachJoint++)
     {
         addPoint(eachJoint->x, eachJoint->y, eachJoint->z, radius);
