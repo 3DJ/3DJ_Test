@@ -156,7 +156,7 @@ void CHandOrbs::drawHandDistancesToScreen(vector<string> &dists) {
     ofPushMatrix();
     ofRotateX(180);
     for( vector<string>::iterator d = dists.begin(); d != dists.end(); d++) {
-        font.drawString("Hand Volume: " + *d, x, count * y);
+        //font.drawString("Hand Volume: " + *d, x, count * y);
         count ++;
     }
 

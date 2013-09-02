@@ -17,10 +17,35 @@ void testApp::setup() {
 
     handCircleRadius = 100.0f;
     jointCircleRadius = 50.0f;
+    
+    loadSoundsForJoints();
 
     song.loadSound("sounds/Maracas.mp3");
     song.setVolume(1.0f);
-    song.play();
+    //song.play();
+    
+    m_distThresh = 100.0f;
+    m_timeThresh = 1.0f;
+    m_prev_time = 0.0f;
+}
+
+void testApp::loadSoundsForJoints()
+{
+    sounds[0].loadSound("sounds/alliance/Alliance.wav");          //Left foot
+    sounds[1].loadSound("");     //Left knee
+    sounds[2].loadSound("");  //Left hip
+    sounds[3].loadSound("");        //Left shoulder
+    sounds[4].loadSound("sounds/alliance/Alliance2.wav");  //Left Elbow
+    sounds[5].loadSound("sounds/alliance/Alliance3.wav");     //Right foot
+    sounds[6].loadSound("");      //Right knee
+    sounds[7].loadSound("");       //Right hip
+    sounds[8].loadSound("");        //Right shoulder
+    sounds[9].loadSound("sounds/alliance/Alliance4.wav");                     //Right elbow
+    sounds[10].loadSound("");       // tor
+    sounds[11].loadSound("");      // neck
+    sounds[12].loadSound("");     // Head
+    sounds[13].loadSound("sounds/alliance/Alliance5.wav");     // Left Hand
+    sounds[14].loadSound("sounds/alliance/Alliance6.wav");     // Right Hand
 }
 
 //--------------------------------------------------------------
@@ -46,6 +71,8 @@ void testApp::draw(){
     ofSetColor(0, 255, 0);
 	string msg = "Num of Users Tracked: " + ofToString(openNIDevice.getNumTrackedUsers());
 	verdana.drawString(msg, 20, ofGetHeight() - 26);
+    string msg2 = "Elapsed Time: " + ofToString(ofGetElapsedTimef());
+	verdana.drawString(msg2, 20, ofGetHeight() - 56);
 
     cam.begin();
 
@@ -120,6 +147,8 @@ void testApp::getUserJointPoints(int userIndex)
         joints.push_back(torso);
         joints.push_back(neck);
         joints.push_back(head);
+        joints.push_back(lhp); //left hand
+        joints.push_back(rhp); //right hand
         
         scalePoints(&joints);
         m_joints->drawJointOrbs(joints, jointCircleRadius);
@@ -127,8 +156,28 @@ void testApp::getUserJointPoints(int userIndex)
         if (float volume = orbs->distanceBetweenHands(hands)) {
             if (userIndex == 0) { song.setVolume(volume); } //Only allow first DJ to change volume
         }
+        
+        if (m_prev_joint_pos.size() > 0) { handleJointMovement(&joints); }
+        
+        m_prev_joint_pos = joints; //Store previous joint position for next time
+        m_prev_time = ofGetElapsedTimef();
     }
 
+}
+
+void testApp::handleJointMovement(vector<ofPoint> *points)
+{   
+    for (int i = 0; i < points->size(); i++)
+    {
+        float dist = points->at(i).distance(m_prev_joint_pos.at(i));
+        if (dist > m_distThresh && ofGetElapsedTimef() > 10.0f) {
+            if(!sounds[i].getIsPlaying()){
+                sounds[i].setPosition(0.0f);
+                sounds[i].play();
+            }
+        }
+    }
+  
 }
 
 void testApp::scalePoints(vector<ofPoint> *points)

@@ -24,6 +24,8 @@ public:
     void handleUsersJoints();
     void getUserJointPoints(int userIndex);
     void scalePoints(vector<ofPoint> *points);
+    void handleJointMovement(vector<ofPoint> *points);
+    void loadSoundsForJoints();
 
 	void keyPressed  (int key);
 	void keyReleased(int key);
@@ -40,9 +42,14 @@ public:
     CHandOrbs *orbs;
     CJointOrbs *m_joints;
     ofSoundPlayer song;
+    ofSoundPlayer sounds[15]; //sounds for joints
+    vector<ofPoint> m_prev_joint_pos;
 
     float handCircleRadius;
     float jointCircleRadius;
+    float m_distThresh;
+    float m_timeThresh;
+    float m_prev_time;
 
 };
 
