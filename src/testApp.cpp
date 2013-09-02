@@ -8,14 +8,14 @@ void testApp::setup() {
     setupKinectEssentials();
     setupHandTracking();
     openNIDevice.start();
-    
+
     orbs = new CHandOrbs(4); //hand tracking drawings
-    
+
     verdana.loadFont(ofToDataPath("verdana.ttf"), 24);
     cam.setFarClip(5000);
-    
+
     handCircleRadius = 100.0f;
-    
+
     song.loadSound("sounds/Maracas.mp3");
     song.setVolume(1.0f);
     song.play();
@@ -31,27 +31,27 @@ testApp::~testApp() {
 void testApp::update(){
     openNIDevice.update();
     ofSoundUpdate();
-    
+
     orbs->update(); //call this after you set volume in song!!!
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
     ofBackground(0);
-    
+
     ofSetColor(0, 255, 0);
 	string msg = "Num of Users Tracked: " + ofToString(openNIDevice.getNumTrackedUsers());
 	verdana.drawString(msg, 20, ofGetHeight() - 26);
-    
+
     cam.begin();
 
     ofPushMatrix();
     ofColor(255,50,50);
     ofCircle(0, 0, 0, 20); //Draw Circle in center of screen for orientation...
-    ofPopMatrix();    
+    ofPopMatrix();
 
     string pos = "not tracking user";
-    
+
     int numUsers = openNIDevice.getNumTrackedUsers();
     if (numUsers) {
         for (int i = 0; i < numUsers; i++) {
@@ -60,35 +60,35 @@ void testApp::draw(){
 
                 //Draw Mesh
                 drawMesh(&user);
-                
+
                 //Get Left and right hand posisitons
                 ofPoint rhp = openNIDevice.getTrackedUser(i).getJoint(JOINT_RIGHT_HAND).getWorldPosition();
                 ofPoint lhp = openNIDevice.getTrackedUser(i).getJoint(JOINT_LEFT_HAND).getWorldPosition();;
                 rhp.z *= -1;  //flip in z direction
                 lhp.z *= -1;  //flip in z direction
-                
+
                 rhp.z += 1000;
                 lhp.z += 1000;
-                
+
                 vector<ofPoint> hands;
                 hands.push_back(rhp);
                 hands.push_back(lhp);
                 orbs->drawHandOrbs(hands, handCircleRadius);  //CHandOrbs drawing
-                
+
                 if (float volume = orbs->distanceBetweenHands(hands)) {
                     if (i == 0) { song.setVolume(volume); } //Only allow first DJ to change volume
                 }
             }
         }
     }
-            
+
     cam.end();
 }
 
 void testApp::drawMesh(ofxOpenNIUser *user)
 {
     ofMesh m = user->getPointCloud();
-    
+
     vector<ofVec3f> vertices = m.getVertices();
     for ( vector<ofVec3f>::iterator vertex = vertices.begin(); vertex < vertices.end(); vertex++)
     {
@@ -101,7 +101,7 @@ void testApp::drawMesh(ofxOpenNIUser *user)
         ofSetColor(255, 255, 255);
         ofCircle(p.x, p.y, p.z, 2.0f);
         ofPopMatrix();
-        
+
     }
 }
 
@@ -116,9 +116,9 @@ void testApp::keyPressed(int key){
 
     switch (key) {
         case 'i':
-            
+
         break;
-            
+
         case 'f':
             ofToggleFullscreen();
             break;
@@ -157,7 +157,7 @@ void testApp::windowResized(int w, int h){
 
 //--------------------------------------------------------------
 void testApp::setupKinectEssentials() {
-    
+
     openNIDevice.setup();//FromXML("openni/config/ofxopenni_config.xml");
     openNIDevice.addImageGenerator();
     openNIDevice.addDepthGenerator();
@@ -166,27 +166,27 @@ void testApp::setupKinectEssentials() {
     openNIDevice.addUserGenerator();
     openNIDevice.setLogLevel(OF_LOG_VERBOSE);
     openNIDevice.getWidth();
-    
+
     openNIDevice.setMaxNumUsers(2);
     openNIDevice.setUsePointCloudsAllUsers(true);
 }
 
 //--------------------------------------------------------------
 void testApp::setupHandTracking() {
-   
+
     // setup the hand generator
     openNIDevice.addHandsGenerator();
-    
+
     // add all focus gestures (ie., wave, click, raise arm)
     openNIDevice.addAllHandFocusGestures();
-    
+
     // or you can add them one at a time
     //vector<string> gestureNames = openNIDevice.getAvailableGestures(); // you can use this to get a list of gestures
     // prints to console and/or you can use the returned vector
     //openNIDevice.addHandFocusGesture("Wave");
-    
+
     openNIDevice.setMaxNumHands(4);
-    
+
     for(int i = 0; i < openNIDevice.getMaxNumHands(); i++){
         ofxOpenNIDepthThreshold depthThreshold = ofxOpenNIDepthThreshold(0, 0, false, true, true, true, true);
         // ofxOpenNIDepthThreshold is overloaded, has defaults and can take a lot of different parameters, eg:
@@ -195,20 +195,20 @@ void testApp::setupHandTracking() {
         // int _pointCloudDrawSize = 2, int _pointCloudResolution = 2
         openNIDevice.addDepthThreshold(depthThreshold);
     }
-    
+
 }
 
 //--------------------------------------------------------------
 void testApp::setupBaseUserPreferences() {
-    
+
     ofxOpenNIUser user;
     user.setUseMaskTexture(true);
     user.setUsePointCloud(true);
     user.setPointCloudDrawSize(2); // this is the size of the glPoint that will be drawn for the point cloud
     user.setPointCloudResolution(5); // this is the step size between points for the cloud
     openNIDevice.setBaseUserClass(user);
-    
-    
+
+
     // if you want to get fine grain control over each possible tracked user for some reason you can iterate
     // through users like I'm doing below. Please note the use of nID = 1 AND nID <= openNIDevices[0].getMaxNumUsers()
     // as what you're doing here is retrieving a user that is being stored in a std::map using it's XnUserID as the key
