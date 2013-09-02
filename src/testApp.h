@@ -20,6 +20,10 @@ public:
 	void draw();
     void drawMesh(ofxOpenNIUser *user);
     void exit();
+    
+    void handleUsersJoints();
+    void getUserJointPoints(int userIndex);
+    void scalePoints(vector<ofPoint> *points);
 
 	void keyPressed  (int key);
 	void keyReleased(int key);

@@ -16,7 +16,7 @@ void testApp::setup() {
     cam.setFarClip(5000);
 
     handCircleRadius = 100.0f;
-    jointCircleRadius = 75.0f;
+    jointCircleRadius = 50.0f;
 
     song.loadSound("sounds/Maracas.mp3");
     song.setVolume(1.0f);
@@ -54,47 +54,90 @@ void testApp::draw(){
     ofCircle(0, 0, 0, 20); //Draw Circle in center of screen for orientation...
     ofPopMatrix();
 
-    string pos = "not tracking user";
+    handleUsersJoints(); //Find users, get Joints, handle joint movement and sound
+    
+    cam.end();
+}
 
+void testApp::handleUsersJoints()
+{
     int numUsers = openNIDevice.getNumTrackedUsers();
     if (numUsers) {
         for (int i = 0; i < numUsers; i++) {
-            ofxOpenNIUser & user = openNIDevice.getTrackedUser(i);
-            if (user.isTracking()) {
+            getUserJointPoints(i);
+        }
+    }
+}
 
-                //Draw Mesh
-                drawMesh(&user);
-
-                //Get Left and right hand posisitons
-                ofPoint rhp = openNIDevice.getTrackedUser(i).getJoint(JOINT_RIGHT_HAND).getWorldPosition();
-                ofPoint lhp = openNIDevice.getTrackedUser(i).getJoint(JOINT_LEFT_HAND).getWorldPosition();
-                ofPoint lkp = openNIDevice.getTrackedUser(i).getJoint(JOINT_LEFT_KNEE).getWorldPosition();
-                
-                rhp.z *= -1;  //flip in z direction
-                lhp.z *= -1;  //flip in z direction
-                lkp.z *= -1;
-                
-                lkp.z += 1000;
-                rhp.z += 1000;
-                lhp.z += 1000;
-
-                vector<ofPoint> hands;
-                hands.push_back(rhp);
-                hands.push_back(lhp);
-                orbs->drawHandOrbs(hands, handCircleRadius);  //CHandOrbs drawing
-                
-                vector<ofPoint>joints;
-                joints.push_back(lkp);
-                m_joints->drawJointOrbs(joints, jointCircleRadius);
-
-                if (float volume = orbs->distanceBetweenHands(hands)) {
-                    if (i == 0) { song.setVolume(volume); } //Only allow first DJ to change volume
-                }
-            }
+void testApp::getUserJointPoints(int userIndex)
+{
+    ofxOpenNIUser & user = openNIDevice.getTrackedUser(userIndex);
+    if (user.isTracking()) {
+        
+        //=================================================================
+        //GET HAND JOINTS
+        //Get Left and right hand posisitons
+        ofPoint rhp = openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_RIGHT_HAND).getWorldPosition();
+        ofPoint lhp = openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_LEFT_HAND).getWorldPosition();
+        
+        vector<ofPoint> hands;
+        hands.push_back(rhp);
+        hands.push_back(lhp);
+        
+        scalePoints(&hands);
+        orbs->drawHandOrbs(hands, handCircleRadius);  //CHandOrbs drawing
+        
+        //=================================================================
+        //GET BODY JOINTS
+        //Left Joints
+        ofPoint lfp =  openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_LEFT_FOOT).getWorldPosition();
+        ofPoint lkp =  openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_LEFT_KNEE).getWorldPosition();
+        ofPoint lhip = openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_LEFT_HIP).getWorldPosition();
+        ofPoint lsp =  openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_LEFT_SHOULDER).getWorldPosition();
+        ofPoint lep =  openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_LEFT_ELBOW).getWorldPosition();
+        //Right Joints
+        ofPoint rfp =  openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_RIGHT_FOOT).getWorldPosition();
+        ofPoint rkp =  openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_RIGHT_KNEE).getWorldPosition();
+        ofPoint rhip = openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_RIGHT_HIP).getWorldPosition();
+        ofPoint rsp =  openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_RIGHT_SHOULDER).getWorldPosition();
+        ofPoint rep =  openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_RIGHT_ELBOW).getWorldPosition();
+        //Center Joints
+        ofPoint torso =  openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_TORSO).getWorldPosition();
+        ofPoint neck =  openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_NECK).getWorldPosition();
+        ofPoint head =  openNIDevice.getTrackedUser(userIndex).getJoint(JOINT_HEAD).getWorldPosition();
+        
+        vector<ofPoint>joints;
+        joints.push_back(lfp);
+        joints.push_back(lkp);
+        joints.push_back(lhip);
+        joints.push_back(lsp);
+        joints.push_back(lep);
+        joints.push_back(rfp);
+        joints.push_back(rkp);
+        joints.push_back(rhip);
+        joints.push_back(rsp);
+        joints.push_back(rep);
+        joints.push_back(torso);
+        joints.push_back(neck);
+        joints.push_back(head);
+        
+        scalePoints(&joints);
+        m_joints->drawJointOrbs(joints, jointCircleRadius);
+        
+        if (float volume = orbs->distanceBetweenHands(hands)) {
+            if (userIndex == 0) { song.setVolume(volume); } //Only allow first DJ to change volume
         }
     }
 
-    cam.end();
+}
+
+void testApp::scalePoints(vector<ofPoint> *points)
+{
+    for(vector<ofPoint>::iterator p = points->begin(); p < points->end(); p++)
+    {
+        p->z *= -1;   //Flip vector in z direction
+        p->z += 1000; // move in front of camera
+    }
 }
 
 void testApp::drawMesh(ofxOpenNIUser *user)
